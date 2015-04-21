@@ -1,27 +1,82 @@
-<h1>Listing leads</h1>
+<h1>Leads</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Company</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<h4>Search through the database</h4>
+<%= form_tag search_index_path,  method: :get do %>
+ <%= text_field_tag :query, params[:query] %>
+ <%= submit_tag "Go", class: 'btn' %>
+<% end %>
 
-  <tbody>
-    <% @leads.each do |lead| %>
-      <tr>
-        <td><%= lead.name %></td>
-        <td><%= lead.company %></td>
-        <td><%= link_to 'Show', lead %></td>
-        <td><%= link_to 'Edit', edit_lead_path(lead) %></td>
-        <td><%= link_to 'Destroy', lead, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<br>
+<h4>Select a date range</h4>
+<%= form_tag leads_path, method: :get do %>
+ <%= text_field_tag 'search[date_from]', @search.date_from %>
+ <%= text_field_tag 'search[date_to]', @search.date_to %>
+<%= submit_tag "Search", class: 'btn' %>
+<% end %>
+
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							Name
+						</th>
+						<th>
+							Company
+						</th>
+						<th>
+						 Location
+						</th>
+						<th>
+              Phone
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+          <% @leads.each do |lead| %>
+					<tr>
+						<td>
+							<%= lead.name %>
+						</td>
+						<td>
+							 <%= lead.company %>
+						</td>
+						<td>
+							<%= lead.location %>
+						</td>
+						<td>
+							<%= lead.phone %>
+						</td>
+            <td>
+              <% link_to 'Edit', edit_lead_path(lead) %>
+            </td>
+					</tr>
+          <% end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<hr>
 
 <%= link_to 'New Lead', new_lead_path %>
+
+<hr>
+
+<div class="well">
+  <%= form_tag import_leads_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <br>
+    <%= submit_tag "Import Leads", class: "btn btn-default" %>
+  <% end %>
+</div>
+
+<div class="well">
+  <h3>Download</h3>
+  <%= link_to "Download as CSV", leads_path(format: "csv") %>
+</div>

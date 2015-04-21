@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :leads
+  get 'search/index'
+
+  resources :leads do
+    collection { post :import }
+  end
 
   get 'welcome/home'
 

@@ -1,15 +1,18 @@
 class LeadsController < ApplicationController
   before_action :set_lead, only: [:show, :edit, :update, :destroy]
+  helper_method :sort_column, :sort_direction
 
   # GET /leads
   # GET /leads.json
   def index
     @search = LeadSearch.new(params[:search])
-    @leads = @search.scope
+    @leads = @search.scope.order(sort_column + ' ' + sort_direction).paginate(page: params[:page], per_page: 5)
     
     respond_to do |format|
-        format.html
+      format.html
       format.csv { render text: @leads.to_csv }
+      format.json { render json: Lead.limit(100) }
+      format.xml { render xml: Lead.limit(50) }
     end
   end
   
@@ -82,4 +85,13 @@ class LeadsController < ApplicationController
     def lead_params
       params.require(:lead).permit(:name, :company, :location, :phone, :date)
     end
+  
+  def sort_column
+    params[:sort] || "name"
+  end
+  
+  def sort_direction
+    params[:direction] || "asc"
+  end
+  
 end

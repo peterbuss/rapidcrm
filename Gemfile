@@ -48,3 +48,8 @@ group :production do
   gem 'gp'
   gem 'rails_12factor'
 end
+
+gem 'will_paginate', '~> 3.0'
+
+gem 'devise', '~> 3.4.1'
+gem 'activeadmin', github: 'gregbell/active_admin'

@@ -1,4 +1,5 @@
 class Lead < ActiveRecord::Base
+  validates_presence_of :name, :company, :location
   
   def self.import(file)
     CSV.foreach(file.path, headers:true) do |row|
